@@ -7,7 +7,7 @@
     "start": "node dist/server.js",
     "dev": "nodemon",
     "build": "tsc",
-    "worker": "nodemon dist/worker.js"
+    "worker": "node dist/workers/index.js"
   },
   "keywords": [],
   "author": "",

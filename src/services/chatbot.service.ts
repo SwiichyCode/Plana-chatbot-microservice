@@ -13,6 +13,10 @@ const saveConversation = async (userId: string, messages: unknown) => {
   await redisClient.set(`chat:${userId}`, JSON.stringify(messages), { EX: config.EXPIRATION_TIME });
 };
 
+const enqueueConversation = async (userId: string, messages: string) => {
+  await redisClient.rPush('chatQueue', JSON.stringify({ userId, messages }));
+};
+
 export const getChatbotResponse = async (userId: string, message: string) => {
   const conversation = await getConversation(userId);
   conversation.push({ role: 'user', content: message });
@@ -26,6 +30,8 @@ export const getChatbotResponse = async (userId: string, message: string) => {
   conversation.push({ role: 'assistant', content: botMessage });
 
   await saveConversation(userId, conversation);
+
+  await enqueueConversation(userId, conversation);
 
   return botMessage;
 };
