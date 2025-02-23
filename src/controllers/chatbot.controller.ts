@@ -6,7 +6,6 @@ export class ChatbotController {
     try {
       const { userId, message } = req.body;
       if (!userId || !message) return res.status(400).json({ message: 'Missing parameters' });
-
       const chatbotResponse = await getChatbotResponse(userId, message);
       return res.status(200).json({ response: chatbotResponse });
     } catch (error) {
