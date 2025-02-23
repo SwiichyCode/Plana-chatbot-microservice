@@ -5,6 +5,8 @@ import { errorHandler } from './middlewares/error-handler';
 import chatbotRoutes from './routes/chatbot.route';
 
 const app = express();
+app.set('trust proxy', 1);
+
 app.use(express.json());
 app.use(cors());
 app.use(limiter);
