@@ -1,21 +1,23 @@
 import redisClient from '../config/redis';
 
 async function processQueue() {
-  console.log('Processing queue...');
+  console.log('[Worker] Starting queue processing...');
 
   while (true) {
     try {
+      console.log('[Worker] Checking for new messages...');
       const message = await redisClient.lPop('chatQueue');
+
       if (!message) {
+        console.log('[Worker] No messages found, waiting...');
         await new Promise(resolve => setTimeout(resolve, 5000));
-        console.log('No message in queue');
         continue;
       }
 
       const { userId, messages } = JSON.parse(message);
-      console.log(`Processing message for user ${userId} && messages ${messages}`);
+      console.log(`[Worker] Processing message for user ${userId} && messages ${messages}`);
     } catch (error) {
-      console.error(error);
+      console.error('[Worker] Error processing message:', error);
     }
   }
 }

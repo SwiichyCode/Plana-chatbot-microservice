@@ -32,6 +32,9 @@ importers:
       redis:
         specifier: ^4.7.0
         version: 4.7.0
+      supervisor:
+        specifier: ^0.12.0
+        version: 0.12.0
       zod:
         specifier: ^3.24.2
         version: 3.24.2
@@ -1016,6 +1019,11 @@ packages:
   strip-json-comments@3.1.1:
     resolution: {integrity: sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==}
     engines: {node: '>=8'}
+
+  supervisor@0.12.0:
+    resolution: {integrity: sha512-iBYeU5Or4WiiIa3+ns1DpHIiHjNNXSuYUiixKcznewwo4ImBJ8EobktaAo2csOcauhrz4SvKRTou8Z2C3W28+A==}
+    engines: {node: '>=0.6.0'}
+    hasBin: true
 
   supports-color@5.5.0:
     resolution: {integrity: sha512-QjVjwdXIt408MIiAqCX4oUKsgU2EqAGzs2Ppkm4aQYbjm+ZEWEcW4SfFNTr4uMNZma0ey4f5lgLrkB0aX0QMow==}
@@ -2151,6 +2159,8 @@ snapshots:
   statuses@2.0.1: {}
 
   strip-json-comments@3.1.1: {}
+
+  supervisor@0.12.0: {}
 
   supports-color@5.5.0:
     dependencies:
