@@ -5,7 +5,8 @@ RUN apk add --no-cache supervisor
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci
+RUN npm install
+RUN npm install -g typescript
 
 COPY . .
 RUN npm run build
