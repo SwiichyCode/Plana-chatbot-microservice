@@ -4,6 +4,8 @@ import config from '../config/env';
 
 const getConversation = async (userId: string) => {
   const history = await redisClient.get(`chat:${userId}`);
+  console.log(history);
+
   return history
     ? JSON.parse(history)
     : [{ role: 'system', content: 'Tu es un assistant pour une application de gestion de tâches.' }];
