@@ -7,7 +7,12 @@
     "start": "node dist/server.js",
     "dev": "nodemon",
     "build": "tsc",
-    "worker": "node dist/workers/index.js"
+    "worker": "node dist/workers/index.js",
+    "db:push": "prisma db push",
+    "db:migrate": "prisma migrate deploy",
+    "db:studio": "prisma studio",
+    "db:reset": "prisma migrate reset",
+    "generate": "prisma generate"
   },
   "keywords": [],
   "author": "",
@@ -26,12 +31,14 @@
   },
   "dependencies": {
     "@mistralai/mistralai": "^1.5.0",
+    "@prisma/client": "^5.22.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "express-rate-limit": "^7.5.0",
     "openai": "^4.85.3",
     "prettier": "^3.5.2",
+    "prisma": "^6.4.1",
     "redis": "^4.7.0",
     "supervisor": "^0.12.0",
     "zod": "^3.24.2"

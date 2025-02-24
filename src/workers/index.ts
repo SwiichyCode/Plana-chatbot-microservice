@@ -1,25 +1,39 @@
 import redisClient from '../config/redis';
+import { prisma } from '../config/prisma';
 
 async function processQueue() {
   console.log('[Worker] Starting queue processing...');
 
   while (true) {
     try {
-      console.log('[Worker] Checking for new messages...');
       const message = await redisClient.lPop('chatQueue');
 
       if (!message) {
-        console.log('[Worker] No messages found, waiting...');
         await new Promise(resolve => setTimeout(resolve, 5000));
         continue;
       }
 
       const { userId, messages } = JSON.parse(message);
-      console.log(`[Worker] Processing message for user ${userId} && messages ${messages}`);
+
+      await prisma.$transaction(async tx => {
+        await tx.conversation.create({
+          data: {
+            userId,
+            messages,
+          },
+        });
+      });
     } catch (error) {
       console.error('[Worker] Error processing message:', error);
+      await new Promise(resolve => setTimeout(resolve, 1000));
     }
   }
 }
+
+process.on('SIGTERM', async () => {
+  console.log('Shutting down...');
+  await prisma.$disconnect();
+  process.exit(0);
+});
 
 processQueue().catch(console.error);
