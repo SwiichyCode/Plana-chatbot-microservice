@@ -4,8 +4,6 @@ import config from '../config/env';
 
 const getConversation = async (userId: string) => {
   const history = await redisClient.get(`chat:${userId}`);
-  console.log(history);
-
   return history
     ? JSON.parse(history)
     : [{ role: 'system', content: 'Tu es un assistant pour une application de gestion de tâches.' }];
@@ -15,8 +13,16 @@ const saveConversation = async (userId: string, messages: unknown) => {
   await redisClient.set(`chat:${userId}`, JSON.stringify(messages), { EX: config.EXPIRATION_TIME });
 };
 
+export const deleteConversation = async (userId: string) => {
+  await redisClient.del(`chat:${userId}`);
+};
+
 const enqueueConversation = async (userId: string, messages: string) => {
   await redisClient.rPush('chatQueue', JSON.stringify({ userId, messages }));
+};
+
+export const deleteQueue = async () => {
+  await redisClient.del('chatQueue');
 };
 
 export const getChatbotResponse = async (userId: string, message: string) => {
@@ -24,7 +30,7 @@ export const getChatbotResponse = async (userId: string, message: string) => {
   conversation.push({ role: 'user', content: message });
 
   const response = await openai.chat.completions.create({
-    model: 'chatgpt-4o-latest',
+    model: 'gpt-3.5-turbo',
     messages: conversation,
   });
 

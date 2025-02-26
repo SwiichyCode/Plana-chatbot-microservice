@@ -1,4 +1,4 @@
-FROM node:18-alpine
+FROM node:18-alpine3.17
 
 RUN apk add --no-cache supervisor
 
@@ -10,6 +10,7 @@ RUN npm install -g typescript
 
 COPY . .
 RUN npm run build
+RUN npx prisma generate 
 
 COPY supervisord.conf /etc/supervisord.conf
 

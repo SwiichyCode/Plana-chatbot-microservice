@@ -6,6 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl"]
 }
 
 datasource db {
@@ -14,7 +15,7 @@ datasource db {
 }
 
 model Conversation {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid())
   userId    String
   messages  Json[]
   createdAt DateTime @default(now())

@@ -7,33 +7,28 @@ async function processQueue() {
   while (true) {
     try {
       const message = await redisClient.lPop('chatQueue');
+      console.log('[Worker] Processing message:', message, '[At]', new Date());
 
       if (!message) {
-        await new Promise(resolve => setTimeout(resolve, 5000));
+        await new Promise(resolve => setTimeout(resolve, 15000));
         continue;
       }
 
       const { userId, messages } = JSON.parse(message);
-
-      await prisma.$transaction(async tx => {
-        await tx.conversation.create({
-          data: {
-            userId,
-            messages,
-          },
-        });
+      const conversation = await prisma.conversation.create({
+        data: {
+          userId,
+          messages,
+        },
       });
+
+      console.log('[Worker] Conversation created:', conversation);
+      await redisClient.del(`chat:${userId}`);
     } catch (error) {
       console.error('[Worker] Error processing message:', error);
       await new Promise(resolve => setTimeout(resolve, 1000));
     }
   }
 }
-
-process.on('SIGTERM', async () => {
-  console.log('Shutting down...');
-  await prisma.$disconnect();
-  process.exit(0);
-});
 
 processQueue().catch(console.error);
